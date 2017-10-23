@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Report</title>
+    <style>
+        @page {
+            size: a4 portrait;
+            top: 25pt;
+            left: 10pt;
+            bottom: 25pt;
+            right: 10pt;
+        }
+        td {
+            text-align: center;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+
+        }
+
+        th, td {
+            padding: 3px;
+        }
+    </style>
+</head>
+<body>
+<h1 style="text-align: center"><u>{{ heading }}</u></h1>
+<table class="table" repeat="1">
+    <thead>
+    <tr>
+        <th>Transaction ID</th>
+        <th>DATE-TIME</th>
+        <th>PID</th>
+        <th>Quantity</th>
+        <th>Tax</th>
+        <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in items %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.datetime }}</td>
+            <td>{{ item.pid }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.tax }}</td>
+            <td>{{ item.total }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+        {% if average %}
+            <td><b>PURCHASE</b></td>
+            <td><b>{{ buy }}</b></td>
+            <td><b>SALE</b></td>
+            <td><b>{{ sale }}</b></td>
+            <td><b>AVERAGE</b></td>
+            <td><b>{{ average }}</b></td>
+        {% elif buy %}
+            <td colspan="5"><b>PURCHASE TOTAL</b></td>
+            <td><b>{{ buy }}</b></td>
+        {% elif sale %}
+            <td colspan="5"><b>SALE TOTAL</b></td>
+            <td><b>{{ sale }}</b></td>
+        {% endif %}
+    </tr>
+    </tfoot>
+</table>
+</body>
+</html>

@@ -1,0 +1,371 @@
+{% extends "index/base.html" %}
+
+{% block title %}
+    Stock
+{% endblock %}
+
+{%  block style %}
+    <style>
+        .flexsearch--wrapper {
+            height: auto;
+            width: auto;
+            max-width: 100%;
+            overflow: hidden;
+            background: transparent;
+            margin: 0;
+            position: static;
+        }
+
+        .flexsearch--form {
+            overflow: hidden;
+            position: relative;
+            margin: 0;
+        }
+
+        .flexsearch--input-wrapper {
+            /* Right padding for submit button width */
+            overflow: hidden;
+        }
+
+        .flexsearch--input {
+            width: 100%;
+        }
+
+        /***********************
+         * Configurable Styles *
+         ***********************/
+        .flexsearch {
+            margin-bottom: 20px;
+            /* Padding for other horizontal elements */
+        }
+
+        .flexsearch--input {
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            box-sizing: content-box;
+            height: 60px;
+            padding: 0 46px 0 10px;
+            border-color: #888;
+            border-radius: 35px;
+            /* (height/2) + border-width */
+            border-style: solid;
+            border-width: 5px;
+            margin-top: 15px;
+            color: #333;
+            font-family: 'Helvetica', sans-serif;
+            font-size: 26px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        .flexsearch--submit {
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: none;
+            width: 60px;
+            height: 60px;
+            padding: 0;
+            border: none;
+            margin-top: 15px;
+            /* margin-top + border-width */
+            margin-right: 5px;
+            /* border-width */
+            background: transparent;
+            color: #888;
+            font-family: 'Helvetica', sans-serif;
+            font-size: 40px;
+            line-height: 60px;
+            outline-style: none;
+        }
+
+        .flexsearch--input:focus {
+            outline: none;
+            border-color: #333;
+        }
+
+        .flexsearch--input:focus.flexsearch--submit {
+            color: #333;
+        }
+
+        .flexsearch--submit:hover {
+            color: #333;
+            cursor: pointer;
+        }
+
+        ::-webkit-input-placeholder {
+            color: #888;
+        }
+
+        input:-moz-placeholder {
+            color: #888;
+        }
+
+    </style>
+{% endblock %}
+
+{% block main %}
+    {% if n_message %}
+        <div class="alert alert-danger alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Error!</strong> {{ n_message }}
+        </div>
+    {% endif %}
+    {% if p_message %}
+        <div class="alert alert-success alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Success!</strong> {{ p_message }}
+        </div>
+    {% endif %}
+
+    <div id="item_list">
+
+        <div class="flexsearch">
+            <div class="flexsearch--wrapper">
+                <form class="flexsearch--form">
+                    <div class="flexsearch--input-wrapper">
+                        <input class="flexsearch--input search" type="search" placeholder="search product id/name">
+                    </div>
+                    <button class="flexsearch--submit" type="reset">&#10006</button>
+                </form>
+            </div>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th class="sort" data-sort="lpid">ID</th>
+                <th class="sort" data-sort="lname">Name</th>
+                <th>Quantity</th>
+                <th>Price(₹)</th>
+                <th>Tax(₹)</th>
+                <th>TOTAL(₹)</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody class="list">
+            {% for item in items %}
+                <tr class="clickable" style="cursor: pointer">
+                    <td class="lpid"><span id="lpid">{{ item.pid }}</span></td>
+                    <td class="lname"><span id="lname">{{ item.name }}</span></td>
+                    <td><span id="lquantity">{{ item.quantity }}</span></td>
+                    <td><span id="lprice">{{ item.sale_price }}</span></td>
+                    <td><span id="ltax">{{ item.sale_tax }}</span></td>
+                    <td><span id="ltotal">{{ item.sale_total }}</span></td>
+                    <td><span class="arrow">&darr;</span></td>
+                </tr>
+                <tr style="display: none">
+                    <td colspan="7">
+                        <h5 style="display: none"><span id="lvendor">{{ item.vendor }}</span></h5>
+                        <ul style="text-align: center">
+                            <li style="display: none"><span id="lgst">{{ item.percent_gst }}</span></li>
+                            <li style="display: none"><span id="ligst">{{ item.percent_igst }}</span></li>
+                            <li><b>GST: </b>{{ item.percent_gst }}%&emsp;&emsp;<b>CGST: </b>{{ item.percent_cgst }}%&emsp;&emsp;<b>SGST: </b>{{ item.percent_sgst }}%&emsp;&emsp;<b>IGST: </b>{{ item.percent_igst }}%</li>
+                        </ul>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Vendor</th>
+                                <th>Quantity</th>
+                                <th>Price(₹)</th>
+                                <th>Date, Time</th>
+                            </tr>
+                            </thead>
+                            <tbody id="vendor_table">
+                            </tbody>
+                        </table>
+                        <button class="btn btn-primary edit" style="display: block; margin: auto">Edit Sale Price</button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <ul class="pagination"></ul>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="formModal" role="form">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit Sale Price</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="stock" action="{% url 'update_sale_price' %}" class="form" method="POST" data-toggle="validator" role="form" style="margin: 0">
+                        {% csrf_token %}
+                        <fieldset>
+                            <div class="form-horizontal">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Product ID</label>
+                                        <input autocomplete="off" class="form-control" autofocus id="pid" name="pid" placeholder="Product ID" type="text" readonly="readonly"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="form-group" style="margin-left: auto">
+                                        <label>Product Name</label>
+                                        <input autocomplete="off" class="form-control" autofocus id="name" name="name" placeholder="Name" type="text" readonly="readonly"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Vendor Name</label>
+                                <input autocomplete="off" class="form-control" autofocus id="vendor" name="vendor" placeholder="Vendor" type="text" readonly="readonly"/>
+                            </div>
+                            <div class="form-group" style="color: blue; text-align: -webkit-center; text-align: -moz-center">
+                                <label>Sale Price(₹)</label>
+                                <input autocomplete="off" autofocus class="form-control" id="s_price" name="s_price" placeholder="Sale amount" style="width: 200px;" type="number" min="0" step="0.01" />
+                            </div>
+                            <div class="form-horizontal" style="color: blue">
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label>Total(₹)</label>
+                                        <input autocomplete="off" autofocus class="form-control" id="s_total" name="s_total" placeholder="Sale total" type="text" readonly="readonly"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group" style="margin-left: auto">
+                                        <label>Total Tax(₹)</label>
+                                        <input autocomplete="off" autofocus class="form-control" id="s_total_tax" name="s_total_tax" placeholder="Total Tax" type="text" readonly="readonly"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group" style="margin-left: auto">
+                                        <label>GST(₹)</label>
+                                        <input autocomplete="off" autofocus class="form-control" id="s_gst" name="s_gst" placeholder="GST ₹" type="text" readonly="readonly"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group" style="margin-left: auto">
+                                        <label>CGST(₹)</label>
+                                        <input autocomplete="off" autofocus class="form-control" id="s_cgst" name="s_cgst" placeholder="CGST ₹" type="text" readonly="readonly"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group" style="margin-left: auto">
+                                        <label>SGST(₹)</label>
+                                        <input autocomplete="off" autofocus class="form-control" id="s_sgst" name="s_sgst" placeholder="SGST ₹" type="text" disabled/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group" style="margin-left: auto">
+                                        <label>IGST(₹)</label>
+                                        <input autocomplete="off" autofocus class="form-control" id="s_igst" name="s_igst" placeholder="IGST ₹" type="text" readonly="readonly"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success" >Save</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+
+    <script>
+        var gst = 0.0;
+        var igst = 0.0;
+        var s_price = 0.0;
+
+        // function to update prices in modal box
+        function update(){
+            var s_tax = s_price*gst/100;
+            var igst_tax = igst*s_price/100;
+            $("#s_price").val(s_price);
+            $("#s_gst").val(parseFloat(s_tax).toFixed(2));
+            $("#s_cgst").val(parseFloat(s_tax/2).toFixed(2));
+            $("#s_sgst").val(parseFloat(s_tax/2).toFixed(2));
+            $("#s_igst").val(parseFloat(igst_tax).toFixed(2));
+            $("#s_total_tax").val(parseFloat(s_tax+igst_tax).toFixed(2));
+            $("#s_total").val(parseFloat(s_price+s_tax+igst_tax).toFixed(2));
+        }
+
+        $(".clickable").click(function() {
+            $(this).next().toggle();
+            if ($(this).find(".arrow").html() === "\u2193"){
+                $(this).find(".arrow").html("&uarr;");
+                var pid = $(this).find("#lpid").html();
+                var name = $(this).find("#lname").html();
+                var vendor = $(this).next().find("#lvendor").html();
+                gst = parseFloat($(this).next().find("#lgst").html());
+                igst = parseFloat($(this).next().find("#ligst").html());
+                s_price = parseFloat($(this).find("#lprice").html());
+                $(this).next().find(".edit").click(function () {
+                    $("#pid").val(pid);
+                    $("#name").val(name);
+                    $("#vendor").val(vendor);
+                    $("#s_price").val(s_price);
+                    if (isNaN(s_price)){
+                        $("#s_gst").val("");
+                        $("#s_cgst").val("");
+                        $("#s_sgst").val("");
+                        $("#s_igst").val("");
+                        $("#s_total_tax").val("");
+                        $("#s_total").val("");
+                    } else {update();}
+                    $("#formModal").modal();
+                });
+                var table = $(this).next().find("#vendor_table");
+                // makes ajax call to get vendors
+                $.ajax({
+                    url: '{% url 'get_vendors' %}',
+                    data: {
+                        'pid': pid
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        table.empty();
+                        $.each(data, function(index,i){
+                            table.append("<tr><td>"+i.vendor+"</td><td>"+i.quantity+"</td><td>"+parseFloat(i.price).toFixed(2)+"</td><td>"+i.datetime+"</td></tr>");
+                        })
+                    }
+                });
+            } else {
+                $(this).find(".arrow").html("&darr;")
+            }
+        });
+
+        $("#s_price").change(function () {
+            s_price = parseFloat($(this).val());
+            update();
+        });
+
+        $(document).ready(function(){
+            $('.flexsearch--submit').hide();
+            $('.flexsearch--input').keyup(function(){
+                var value = $(this).val();
+
+                if(value.length !=0){
+                    $('.flexsearch--submit').show();
+                } else {
+                    $('.flexsearch--submit').hide();
+                }
+
+
+            });
+        });
+
+        $('.flexsearch--submit').click(function(){
+            $('.search').val('');
+            itemList.search();
+            $('.flexsearch--submit').hide();
+        });
+
+        var itemList = new List('item_list', {
+            valueNames: ['lpid', 'lname'],
+            page: 30,
+            pagination: true
+        });
+
+    </script>
+
+{% endblock %}

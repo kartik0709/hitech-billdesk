@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Item List</title>
+    <style>
+        @page {
+            size: a4 portrait;
+            @frame header_content{
+                -pdf-frame-content: header_content;
+                height: 20pt;
+                top: 5pt;
+            }
+            @frame content_frame1 {
+            width: 292pt;
+            left: 4pt;
+            top: 25pt;
+            bottom: 6pt;
+            }
+            @frame content_frame2 {
+            width: 292pt;
+            right: 4pt;
+            top: 25pt;
+            bottom: 6pt;
+            }
+        }
+
+        td {
+            text-align: center;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+
+        }
+
+        th, td {
+            padding: 3px;
+        }
+    </style>
+</head>
+<body>
+<div id="header_content">
+    <h1 style="text-align: center;"><u>ITEM LIST</u></h1>
+</div>
+<table class="table" repeat="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in items %}
+        <tr>
+            <td>{{ item.pid }}</td>
+            <td>{{ item.name }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

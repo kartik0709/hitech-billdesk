@@ -1,0 +1,285 @@
+{% extends "index/base.html" %}
+
+{% block title %}
+    Purchase
+{% endblock %}
+
+{% block main %}
+    {% if n_message %}
+    <div class="alert alert-danger alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Error!</strong> {{ n_message }}
+    </div>
+    {% endif %}
+    {% if p_message %}
+    <div class="alert alert-success alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Success!</strong> {{ p_message }}
+    </div>
+    {% endif %}
+    <strong><u>BUYING INFORMATION</u></strong>
+    <br>
+    <br>
+    <form id="purchase" action="{% url 'purchase' %}" class="form" method="POST" data-toggle="validator" role="form">
+    {% csrf_token %}
+        <fieldset>
+            <div class="form-horizontal">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>Product ID</label>
+                        <input autocomplete="off" class="form-control" autofocus id="pid" name="pid" placeholder="Product ID" type="text" required/>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>Product Name</label>
+                        <input autocomplete="off" class="form-control" autofocus id="name" name="name" placeholder="Name" type="text" required/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Vendor Name</label>
+                <input autocomplete="off" class="form-control" autofocus id="vendor" name="vendor" placeholder="Vendor" type="text" required/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-horizontal">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input autocomplete="off" autofocus class="form-control" id="quantity" name="quantity" placeholder="Quantity" type="number" min="1" required/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>Price(₹)</label>
+                        <input autocomplete="off" class="form-control" autofocus id="price" name="price" placeholder="Price ₹" type="number" step="0.01" min="0" required/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>GST(%)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="percent_gst" name="percent_gst" placeholder="GST %" type="number" min="0" step="0.01" required/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>CGST(%)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="percent_cgst" name="percent_cgst" placeholder="CGST %" type="number" min="0" step="0.01" required/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>SGST(%)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="percent_sgst" name="percent_sgst" placeholder="SGST %" type="number" min="0" step="0.01" required/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>IGST(%)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="percent_igst" name="percent_igst" placeholder="IGST ₹" type="number" min="0" step="0.01"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label>Total Amount(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="total" name="total" placeholder="Total amount" type="number" min="0" step="0.01" required/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>Total Tax(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="total_tax" name="total_tax" placeholder="Total Tax" type="number" min="0" step="0.01" required/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>GST(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="gst" name="gst" placeholder="GST ₹" type="number" min="0" step="0.01" required/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>CGST(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="cgst" name="cgst" placeholder="CGST ₹" type="number" min="0" step="0.01" required/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>SGST(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="sgst" name="sgst" placeholder="SGST ₹" type="number" min="0" step="0.01" required/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>IGST(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="igst" name="igst" placeholder="IGST ₹" type="number" min="0" step="0.01"/>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <hr>
+        <Strong style="color: blue"><u>SALE INFORMATION (OPTIONAL)</u></Strong>
+        <br>
+        <br>
+        <fieldset>
+            <div class="form-group" style="color: blue; text-align: -webkit-center; text-align: -moz-center">
+                <label>Sale Price(₹)</label>
+                <input autocomplete="off" autofocus class="form-control" id="s_price" name="s_price" placeholder="Sale amount" style="width: 200px;" type="number" min="0" step="0.01"/>
+            </div>
+            <div class="form-horizontal" style="color: blue">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label>Sale Amount(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="s_total" name="s_total" placeholder="Sale total" type="number" min="0" step="0.01"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>Total Tax(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="s_total_tax" name="s_total_tax" placeholder="Total Tax" type="number" min="0" step="0.01"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>GST(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="s_gst" name="s_gst" placeholder="GST ₹" type="number" min="0" step="0.01"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>CGST(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="s_cgst" name="s_cgst" placeholder="CGST ₹" type="number" min="0" step="0.01"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>SGST(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="s_sgst" name="s_sgst" placeholder="SGST ₹" type="number" min="0" step="0.01"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>IGST(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="s_igst" name="s_igst" placeholder="IGST ₹" type="number" min="0" step="0.01"/>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <button class="btn btn-success" type="submit" id="submit">Purchase</button>
+    <br>
+    <br>
+    <br>
+    </form>
+
+{% endblock %}
+{% block javascript %}
+    <script>
+        // dummy variable to hold the price of the product
+        var price = 0.0;
+        var quantity = 0;
+        var gst = 0.0;
+        var tax = 0.0;
+        var igst = 0.0;
+        var igst_tax = 0.0;
+
+        function update(){
+            tax = gst*price/100;
+            igst_tax = igst*price/100;
+            $("#gst").val(parseFloat(tax).toFixed(2));
+            $("#cgst").val(parseFloat(tax/2).toFixed(2));
+            $("#sgst").val(parseFloat(tax/2).toFixed(2));
+            $("#igst").val(parseFloat(igst_tax).toFixed(2));
+            $("#total_tax").val(parseFloat((tax+igst_tax)*quantity).toFixed(2));
+            $("#total").val(parseFloat((tax+igst_tax+price)*quantity).toFixed(2));
+        }
+
+        $("#price").change(function(){
+            price = parseFloat($(this).val());
+            update();
+        });
+
+        $("#percent_gst").change(function(){
+           gst = parseFloat($(this).val());
+           $("#percent_cgst").val(parseFloat(gst/2).toFixed(2));
+           $("#percent_sgst").val(parseFloat(gst/2).toFixed(2));
+           update();
+        });
+
+        $("#percent_igst").change(function (){
+            igst = parseFloat($(this).val());
+            update();
+        });
+
+        $("#quantity").change(function(){
+            quantity = parseInt($(this).val());
+            update();
+        });
+
+        $("#s_price").change(function(){
+            var s_price = parseFloat($(this).val());
+            var s_tax = s_price*gst/100;
+            var igst_tax = igst*s_price/100;
+            $("#s_gst").val(parseFloat(s_tax).toFixed(2));
+            $("#s_cgst").val(parseFloat(s_tax/2).toFixed(2));
+            $("#s_sgst").val(parseFloat(s_tax/2).toFixed(2));
+            $("#s_igst").val(parseFloat(igst_tax).toFixed(2));
+            $("#s_total_tax").val(parseFloat(s_tax+igst_tax).toFixed(2));
+            $("#s_total").val(parseFloat(s_tax+s_price+igst_tax).toFixed(2));
+        });
+
+        $("#pid").change(function(){
+            var pid = $(this).val();
+
+            $.ajax({
+                url: '{% url 'pid_check' %}',
+                data: {
+                    'pid': pid
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.exists){
+                        $("#name").val(data.name);
+                        $("#vendor").val(data.vendor);
+                        gst = parseFloat(data.p_gst);
+                        $("#percent_gst").val(gst);
+                        $("#percent_cgst").val(parseFloat(gst/2).toFixed(2));
+                        $("#percent_sgst").val(parseFloat(gst/2).toFixed(2));
+                        igst = parseFloat(data.p_igst);
+                        $("#percent_igst").val(igst);
+                        update();
+                        if(data.s_price !== undefined){
+                            var s_price = parseFloat(data.s_price);
+                            var s_tax = s_price*gst/100;
+                            var igst_tax = igst*s_price/100;
+                            $("#s_price").val(s_price);
+                            $("#s_gst").val(parseFloat(s_tax).toFixed(2));
+                            $("#s_cgst").val(parseFloat(s_tax/2).toFixed(2));
+                            $("#s_sgst").val(parseFloat(s_tax/2).toFixed(2));
+                            $("#s_igst").val(parseFloat(igst_tax).toFixed(2));
+                            $("#s_total_tax").val(parseFloat(s_tax+igst_tax).toFixed(2));
+                            $("#s_total").val(parseFloat(s_price+s_tax+igst_tax).toFixed(2));
+                        }
+                        else{
+                            $("#s_price").val("");
+                            $("#s_gst").val("");
+                            $("#s_cgst").val("");
+                            $("#s_sgst").val("");
+                            $("#s_igst").val("");
+                            $("#s_total_tax").val("");
+                            $("#s_total").val("");
+                        }
+                    } else {
+                        var pid = $("#pid").val();
+                        $("#purchase").trigger("reset");
+                        $("#pid").val(pid);
+                    }
+                }
+            })
+        });
+
+
+
+    </script>
+{% endblock %}

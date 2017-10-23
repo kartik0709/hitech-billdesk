@@ -1,0 +1,38 @@
+{% extends "index/base.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Name</th>
+                <th>Units</th>
+                <th>Price</th>
+                <th>Tax</th>
+                <th>TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sale in sales %}
+            <tr>
+                <td>{{ sale.pid }}</td>
+                <td>{{ sale.name }}</td>
+                <td>{{ sale.quantity }}</td>
+                <td>{{ sale.sprice }}</td>
+                <td>{{ sale.stax }}</td>
+                <td>{{ sale.stotal }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5">CASH</td>
+                <td>₹{{cash}}</td>
+            </tr>
+        </tfoot>
+    </table>
+{% endblock %}

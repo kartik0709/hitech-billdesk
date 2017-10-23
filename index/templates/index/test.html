@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Invoice</title>
+    <style>
+        @page {
+            size: a4 portrait;
+            @frame header_frame {
+                -pdf-frame-content: header_content;
+                height: 20pt;
+                top:25pt;
+                -pdf-frame-border: 1;
+            }
+            @frame address_frame {
+            -pdf-frame-content: address_content;
+            width: 292pt;
+            left: 25pt;
+            top: 50pt;
+            bottom: 730pt;
+            -pdf-frame-border: 1;
+            }
+            @frame photo_frame {
+            -pdf-frame-content: photo_content;
+            width: 292pt;
+            right: 25pt;
+            top: 50pt;
+            bottom: 730pt;
+            -pdf-frame-border: 1;
+            }
+            @frame billing_frame {
+            -pdf-frame-content: billing_content;
+            width: 292pt;
+            right: 25pt;
+            top: 150pt;
+            bottom: 630pt;
+            -pdf-frame-border: 1;
+            }
+        }
+
+        img {
+            zoom: 80%;
+        }
+    </style>
+</head>
+<body>
+<div id="header_content">
+    <h1 style="text-align: center"><u>INVOICE</u></h1>
+</div>
+<div id="photo_content" style="text-align: right">
+    <img src="{% static 'index/logo_main.jpg' %}">
+</div>
+<div id="address_content" style="text-align: left; line-height: 0.85; font: 100% sans-serif;">
+    <p>Citizen Service Center</p>
+    <p>Welcome Shopping Complex</p>
+    <p>Baltana, Zirakpur</p>
+    <p>Punjab, India</p>
+</div>
+<div id="billing_content" style="text-align: right; line-height: 0.85; font: 100% sans-serif;">
+    <h1>BILLING PERSON</h1>
+    <p>NAME</p>
+</div>
+</body>
+</html>

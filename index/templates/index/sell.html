@@ -1,0 +1,201 @@
+{% extends "index/base.html" %}
+
+{% block title %}
+    Sell
+{% endblock %}
+
+{% block main %}
+    {% if n_message %}
+    <div class="alert alert-danger alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Error!</strong> {{ n_message }}
+    </div>
+    {% endif %}
+    {% if p_message %}
+    <div class="alert alert-success alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Success!</strong> {{ p_message }}
+    </div>
+    {% endif %}
+    <strong><u>SALE INFORMATION</u></strong>
+    <br>
+    <br>
+    <form id="sell" action="{% url 'sell' %}" method="POST" data-toggle="validator" role="form">
+    {% csrf_token %}
+        <fieldset>
+            <div class="form-horizontal">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>Product ID</label>
+                        <input autocomplete="off" list="pid_list" class="form-control" autofocus id="pid" name="pid" placeholder="Product ID" type="text" required/>
+                        <datalist id="pid_list">
+                            {% for pid in pid_list %}
+                                <option value={{ pid }}>
+                            {% endfor %}
+                        </datalist>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>Product Name</label>
+                        <input autocomplete="off" class="form-control" autofocus id="name" name="name" placeholder="Name" type="text" readonly="readonly"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Customer Name</label>
+                <input autocomplete="off" class="form-control" autofocus id="customer" name="customer" placeholder="Customer Name" type="text" required/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-horizontal">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label>Quantity(Available:<span id="available"></span>)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="quantity" name="quantity" placeholder="Quantity" type="number" min="1" required/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>Price(₹)</label>
+                        <input autocomplete="off" class="form-control" autofocus id="price" name="price" placeholder="Price ₹" type="number" step="0.01" min="0" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>GST(%)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="percent_gst" name="percent_gst" placeholder="GST %" type="number" min="0" step="0.01" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>CGST(%)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="percent_cgst" name="percent_cgst" placeholder="CGST %" type="number" min="0" step="0.01" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>SGST(%)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="percent_sgst" name="percent_sgst" placeholder="SGST %" type="number" min="0" step="0.01" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>IGST(%)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="percent_igst" name="percent_igst" placeholder="IGST ₹" type="number" min="0" step="0.01" readonly="readonly"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label>Total Amount(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="total" name="total" placeholder="Total amount" type="number" min="0" step="0.01" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>Total Tax(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="total_tax" name="total_tax" placeholder="Total Tax" type="number" min="0" step="0.01" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>GST(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="gst" name="gst" placeholder="GST ₹" type="number" min="0" step="0.01" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>CGST(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="cgst" name="cgst" placeholder="CGST ₹" type="number" min="0" step="0.01" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>SGST(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="sgst" name="sgst" placeholder="SGST ₹" type="number" min="0" step="0.01" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group" style="margin-left: auto">
+                        <label>IGST(₹)</label>
+                        <input autocomplete="off" autofocus class="form-control" id="igst" name="igst" placeholder="IGST ₹" type="number" min="0" step="0.01" readonly="readonly"/>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <button class="btn btn-success" type="submit" id="submit">Sell</button>
+    </form>
+
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        // dummy variable to hold the price of the product
+        var total = 0;
+        var tax = 0;
+        var available = 0;
+
+        // checks the product whenever user enters PID
+        $("#pid").change(function () {
+            var pid = $(this).val();
+
+            $.ajax({
+                url: '{% url "validate_pid" %}',
+                data: {
+                    'pid': pid
+                },
+                dataType: 'json',
+                success: function(data){
+                    if (data.exists) {
+                        $("#quantity").css({"color": "black"});
+                        $("#customer").removeAttr('disabled');
+                        $("#quantity").removeAttr('disabled');
+                        $("#price").val(data.price);
+                        var price = parseFloat(data.price);
+                        var gst = parseFloat(data.gst);
+                        var igst = parseFloat(data.igst);
+                        $("#available").html(data.available);
+                        $("#name").val(data.name);
+                        $("#percent_gst").val(gst);
+                        $("#percent_cgst").val(parseFloat(gst/2).toFixed(2));
+                        $("#percent_sgst").val(parseFloat(gst/2).toFixed(2));
+                        $("#percent_igst").val(igst);
+                        $("#gst").val(data.price_gst);
+                        $("#cgst").val(parseFloat((data.price_gst)/2).toFixed(2));
+                        $("#sgst").val(parseFloat((data.price_gst)/2).toFixed(2));
+                        $("#igst").val(data.price_igst);
+                        $("#total_tax").val(parseFloat(parseFloat(data.price_gst)+parseFloat(data.price_igst)).toFixed(2));
+                        $("#total").val(parseFloat(parseFloat(data.price_gst)+parseFloat(data.price_igst)+price).toFixed(2));
+                        tax = parseFloat(data.price_gst)+parseFloat(data.price_igst);
+                        total = parseFloat(data.price_gst)+parseFloat(data.price_igst)+price;
+                        available = parseInt(data.available);
+                    } else {
+                        $("#customer").attr('disabled', 'disabled').val("");
+                        $("#quantity").attr('disabled', 'disabled').val("");
+                        var pid = $("#pid").val();
+                        $("#sell").trigger("reset");
+                        $("#pid").val(pid);
+                    }
+                }
+            });
+        });
+
+        // whenever quantity changes update function is called
+        $("#quantity").change(function () {
+            $("#quantity").css({"color": "black"});
+            var quantity = parseInt($(this).val());
+            $("#total").val(parseFloat(total*quantity).toFixed(2));
+            $("#total_tax").val(parseFloat(tax*quantity).toFixed(2));
+        });
+
+        // checks when submitting the form whether the requested quantity is not more than available quantity
+        $("#sell").submit(function(event){
+            if (parseInt($("#quantity").val()) > available){
+                $("#quantity").css({"color": "red"});
+                event.preventDefault();
+            }
+        });
+
+    </script>
+{% endblock %}

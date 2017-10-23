@@ -1,0 +1,101 @@
+{% extends "index/base.html" %}
+
+{% block title %}
+    Report
+{% endblock %}
+
+{% block main %}
+    {% if n_message %}
+        <div class="alert alert-danger alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Error!</strong> {{ n_message }}
+        </div>
+    {% endif %}
+    {% if p_message %}
+        <div class="alert alert-success alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Success!</strong> {{ p_message }}
+        </div>
+    {% endif %}
+    <strong><u>GENERATE REPORT</u></strong>
+    <br>
+    <br>
+    <form id="report" action="{% url 'report' %}" target="_blank" method="POST" data-toggle="validator" role="form">
+        {% csrf_token %}
+        <fieldset>
+            <span id="error" style="display: none; color: red; "></span>
+            <div class="form-horizontal">
+                <div class="col-sm-6">
+                    <label>FROM</label>
+                    <div class="input-group date" data-provide="datepicker">
+                        <input id="from" name="from" type="text" class="form-control">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-th"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label>TO</label>
+                    <div class="input-group date" data-provide="datepicker">
+                        <input id="to" name="to" type="text" class="form-control">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-th"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" style="margin-top: 80px">
+                <input type="radio" id="purchase" name="choice" value="purchase">
+                <label for="purchase" style="margin-right: 10px">Purchase</label>
+                <input type="radio" id="sale" name="choice" value="sale">
+                <label for="sale" style="margin-right: 10px">Sale</label>
+                <input type="radio" id="both" name="choice" value="both" checked>
+                <label for="both">Both</label>
+            </div>
+            <div class="form-group">
+                <input type="radio" id="pdf" name="type" value="pdf" checked>
+                <label for="pdf" style="margin-right: 10px">PDF</label>
+                <input type="radio" id="excel" name="type" value="excel">
+                <label for="excel" style="margin-right: 10px">EXCEL</label>
+            </div>
+        </fieldset>
+        <button class="btn btn-success" type="submit" id="submit">Generate Report</button>
+    </form>
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $('.date').datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            autoclose: true
+        });
+
+        $('#to').change(function(){
+            $("#error").hide();
+        });
+
+        $('#from').change(function(){
+            $("#error").hide();
+        });
+
+        $('#report').submit(function (event) {
+           var f = moment($('#from').val(), 'DD/MM/YYYY');
+           var t = moment($('#to').val(), 'DD/MM/YYYY');
+           var current = moment();
+
+           d = t.diff(f);
+           c = current.diff(f);
+           if (d<0){
+               $("#error").html("'To' date cannot be less than 'From' date.");
+               $("#error").show();
+               event.preventDefault();
+           } else if (c<0) {
+               $("#error").html("'From' Date cannot be ahead of current date.");
+               $("#error").show();
+               event.preventDefault();
+           }
+        });
+    </script>
+{% endblock %}

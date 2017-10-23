@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Invoice</title>
+    <style>
+        header h1 {
+            background: #000;
+            border-radius: 0.25em;
+            color: #FFF;
+            margin: 0 0 1em;
+            padding: 0.5em 0;
+            font: bold 100% sans-serif;
+            letter-spacing: 0.5em;
+            text-align: center;
+        }
+
+        header address {
+            float: left;
+            font-size: 75%;
+            font-style: normal;
+            line-height: 0.85;
+            margin: 0 1em 1em 0;
+        }
+
+        header img {
+            display: block;
+            float: right;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <h1>INVOICE</h1>
+    <img src="{% static 'index/logo_main.jpg' %}">
+    <address>
+        <p>Citizen Service Center</p>
+        <p>Welcome Shopping Complex</p>
+        <p>Baltana, Zirakpur</p>
+        <p>Punjab, India</p>
+        <p>+91-9357607249</p>
+    </address>
+</header>
+</body>
+</html>
