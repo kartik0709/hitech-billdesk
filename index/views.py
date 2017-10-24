@@ -48,7 +48,7 @@ def register(request):
         pwd_hash = pwd_context.hash(request.POST.get("password"))
 
         # creates a new User object
-        user = User(username=request.POST.get("username"), hash=pwd_hash, name=request.POST.get("name"))
+        user = User(username=(request.POST.get("username")).lower(), hash=pwd_hash, name=request.POST.get("name"))
 
         # saves User object into the database
         try:
@@ -84,7 +84,7 @@ def login(request):
             return render(request, "index/login.html", {"n_message": "Invalid password."})
 
         # gets user from database
-        user = User.objects.filter(username=request.POST.get("username"))
+        user = User.objects.filter(username=(request.POST.get("username")).lower())
 
         # if user is found in database
         if user.exists() and len(user) == 1:
