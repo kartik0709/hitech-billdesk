@@ -41,8 +41,8 @@ def register(request):
 
         # if password blank or less than 6 character or didn't match, return error
         elif not request.POST.get("password") or request.POST.get("password") != request.POST.get("verifypassword") \
-                or len(request.POST.get("password")) > 6:
-            return render(request, "index/register.html", {"n_message": "Invalid password."})
+                or len(request.POST.get("password")) < 6:
+            return render(request, "index/register.html", {"n_message": "Password less than 6. Invalid password."})
 
         # converts password into hash
         pwd_hash = pwd_context.hash(request.POST.get("password"))
