@@ -18,7 +18,7 @@ reportlab==3.4.0
 requests==2.20.0
 requests-oauthlib==0.8.0
 six==1.11.0
-urllib3==1.22
+urllib3==1.24.2
 whitenoise==3.3.1
 xhtml2pdf==0.2b1
 xlsxwriter==1.0.2
